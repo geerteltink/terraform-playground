@@ -1,0 +1,15 @@
+{
+    "service": "site-main",
+    "status": "healthy",
+    "uptime": "running",
+    "timestamp": "2025-08-01T09:30:00Z",
+    "checks": {
+        "nginx": "ok",
+        "static_files": "ok",
+        "ingress": "ok"
+    },
+    "info": {
+        "description": "Main site serving welcome page and API navigation",
+        "environment": "development"
+    }
+}

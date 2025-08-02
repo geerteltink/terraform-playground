@@ -1,0 +1,11 @@
+{
+    "error": "Not Found",
+    "message": "The requested endpoint does not exist",
+    "service": "api-two",
+    "available_endpoints": [
+        "/",
+        "/health"
+    ],
+    "timestamp": "2025-08-01T09:30:00Z",
+    "suggestion": "Check the API documentation for valid endpoints"
+}

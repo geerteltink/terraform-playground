@@ -1,0 +1,15 @@
+{
+    "service": "api-two",
+    "version": "2.0.0",
+    "status": "running",
+    "description": "Second API service with enhanced features",
+    "endpoints": [
+        "/",
+        "/health"
+    ],
+    "features": [
+        "load-balancing",
+        "enhanced-caching",
+        "advanced-monitoring"
+    ]
+}

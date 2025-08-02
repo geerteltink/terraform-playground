@@ -1,0 +1,10 @@
+{
+    "service": "api-one",
+    "version": "1.0.0",
+    "status": "running",
+    "description": "First API service for development and testing",
+    "endpoints": [
+        "/",
+        "/health"
+    ]
+}

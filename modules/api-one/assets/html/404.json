@@ -1,0 +1,9 @@
+{
+    "error": "Not Found",
+    "message": "The requested endpoint does not exist",
+    "service": "api-one",
+    "available_endpoints": [
+        "/",
+        "/health"
+    ]
+}

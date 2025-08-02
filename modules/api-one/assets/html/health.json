@@ -1,0 +1,10 @@
+{
+    "service": "api-one",
+    "status": "healthy",
+    "uptime": "running",
+    "checks": {
+        "database": "ok",
+        "memory": "ok",
+        "disk": "ok"
+    }
+}

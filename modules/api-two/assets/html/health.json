@@ -1,0 +1,18 @@
+{
+    "service": "api-two",
+    "status": "healthy",
+    "uptime": "running",
+    "timestamp": "2025-08-01T09:30:00Z",
+    "checks": {
+        "database": "ok",
+        "memory": "ok",
+        "disk": "ok",
+        "cache": "ok",
+        "load_balancer": "ok"
+    },
+    "metrics": {
+        "requests_per_second": 150,
+        "average_response_time": "25ms",
+        "error_rate": "0.1%"
+    }
+}
