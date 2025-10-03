@@ -1,4 +1,6 @@
 resource "kubernetes_namespace" "api_one" {
+  count = var.create_namespace ? 1 : 0
+  
   metadata {
     name = var.namespace
   }
@@ -9,7 +11,7 @@ resource "kubernetes_config_map" "nginx_config" {
   depends_on = [kubernetes_namespace.api_one]
   
   metadata {
-    name      = "nginx-config"
+    name      = "api-one-nginx-config"
     namespace = var.namespace
   }
 
@@ -23,7 +25,7 @@ resource "kubernetes_config_map" "json_content" {
   depends_on = [kubernetes_namespace.api_one]
   
   metadata {
-    name      = "json-content"
+    name      = "api-one-json-content"
     namespace = var.namespace
   }
 
@@ -38,10 +40,10 @@ resource "kubernetes_deployment" "api_one" {
   depends_on = [kubernetes_namespace.api_one]
   
   metadata {
-    name      = "${var.namespace}-deployment"
+    name      = "api-one-deployment"
     namespace = var.namespace
     labels = {
-      app         = "${var.namespace}"
+      app         = "api-one"
       component   = "api"
       tier        = "backend"
       environment = "development"
@@ -52,13 +54,13 @@ resource "kubernetes_deployment" "api_one" {
     replicas = 1
     selector {
       match_labels = {
-        app = "${var.namespace}"
+        app = "api-one"
       }
     }
     template {
       metadata {
         labels = {
-          app         = "${var.namespace}"
+          app         = "api-one"
           component   = "api"
           tier        = "backend"
           environment = "development"
@@ -67,7 +69,7 @@ resource "kubernetes_deployment" "api_one" {
       spec {
         container {
           image = "nginx:1.29.0-alpine-slim"
-          name  = var.namespace
+          name  = "api-one"
 
           port {
             container_port = 80
@@ -117,13 +119,13 @@ resource "kubernetes_service" "api_one" {
   depends_on = [kubernetes_namespace.api_one]
   
   metadata {
-    name      = "${var.namespace}-service"
+    name      = "api-one-service"
     namespace = var.namespace
   }
 
   spec {
     selector = {
-      app = "${var.namespace}"
+      app = "api-one"
     }
 
     port {
@@ -140,7 +142,7 @@ resource "kubernetes_ingress_v1" "api_one" {
   depends_on = [kubernetes_namespace.api_one]
   
   metadata {
-    name      = "${var.namespace}-ingress"
+    name      = "api-one-ingress"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"                = "nginx"
@@ -158,7 +160,7 @@ resource "kubernetes_ingress_v1" "api_one" {
           path_type = "ImplementationSpecific"
           backend {
             service {
-              name = "${var.namespace}-service"
+              name = "api-one-service"
               port {
                 number = 80
               }

@@ -14,3 +14,15 @@ variable "letsencrypt_email" {
   description = "Email address for Let's Encrypt certificate registration"
   type        = string
 }
+
+variable "namespace" {
+  description = "Kubernetes namespace for ingress controller"
+  type        = string
+  default     = "ingress-nginx"
+}
+
+variable "create_namespace" {
+  description = "Whether to create the namespace"
+  type        = bool
+  default     = true
+}

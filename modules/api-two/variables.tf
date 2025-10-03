@@ -13,3 +13,9 @@ variable "ingress_path" {
   type    = string
   default = "/api/two"
 }
+
+variable "create_namespace" {
+  description = "Whether to create the namespace"
+  type        = bool
+  default     = true
+}

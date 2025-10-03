@@ -21,3 +21,9 @@ variable "letsencrypt_email" {
   type        = string
   default     = "letsencrypt.qo1ww@m.elt.ink"
 }
+
+variable "shared_namespace" {
+  description = "Shared namespace for all pods to appear together in Podman Desktop"
+  type        = string
+  default     = "k8s-example"
+}

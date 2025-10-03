@@ -1,4 +1,6 @@
 resource "kubernetes_namespace" "api_two" {
+  count = var.create_namespace ? 1 : 0
+  
   metadata {
     name = var.namespace
   }
@@ -7,7 +9,7 @@ resource "kubernetes_namespace" "api_two" {
 # Create nginx configuration for JSON API responses
 resource "kubernetes_config_map" "nginx_config" {
   metadata {
-    name      = "nginx-config"
+    name      = "api-two-nginx-config"
     namespace = var.namespace
   }
 
@@ -19,7 +21,7 @@ resource "kubernetes_config_map" "nginx_config" {
 # Create JSON content for API responses
 resource "kubernetes_config_map" "json_content" {
   metadata {
-    name      = "json-content"
+    name      = "api-two-json-content"
     namespace = var.namespace
   }
 
@@ -32,10 +34,10 @@ resource "kubernetes_config_map" "json_content" {
 
 resource "kubernetes_deployment" "api_two" {
   metadata {
-    name      = "${var.namespace}-deployment"
+    name      = "api-two-deployment"
     namespace = var.namespace
     labels = {
-      app         = "${var.namespace}"
+      app         = "api-two"
       component   = "api"
       tier        = "backend"
       environment = "development"
@@ -46,13 +48,13 @@ resource "kubernetes_deployment" "api_two" {
     replicas = 2
     selector {
       match_labels = {
-        app = "${var.namespace}"
+        app = "api-two"
       }
     }
     template {
       metadata {
         labels = {
-          app         = "${var.namespace}"
+          app         = "api-two"
           component   = "api"
           tier        = "backend"
           environment = "development"
@@ -61,7 +63,7 @@ resource "kubernetes_deployment" "api_two" {
       spec {
         container {
           image = "nginx:1.29.0-alpine-slim"
-          name  = var.namespace
+          name  = "api-two"
 
           port {
             container_port = 80
@@ -109,13 +111,13 @@ resource "kubernetes_deployment" "api_two" {
 
 resource "kubernetes_service" "api_two" {
   metadata {
-    name      = "${var.namespace}-service"
+    name      = "api-two-service"
     namespace = var.namespace
   }
 
   spec {
     selector = {
-      app = "${var.namespace}"
+      app = "api-two"
     }
 
     port {
@@ -130,7 +132,7 @@ resource "kubernetes_service" "api_two" {
 
 resource "kubernetes_ingress_v1" "api_two" {
   metadata {
-    name      = "${var.namespace}-ingress"
+    name      = "api-two-ingress"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"                = "nginx"
@@ -148,7 +150,7 @@ resource "kubernetes_ingress_v1" "api_two" {
           path_type = "ImplementationSpecific"
           backend {
             service {
-              name = "${var.namespace}-service"
+              name = "api-two-service"
               port {
                 number = 80
               }

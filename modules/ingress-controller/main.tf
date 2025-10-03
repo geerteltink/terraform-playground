@@ -1,6 +1,8 @@
 resource "kubernetes_namespace" "ingress_nginx" {
+  count = var.create_namespace ? 1 : 0
+  
   metadata {
-    name = "ingress-nginx"
+    name = var.namespace
   }
 }
 
@@ -8,7 +10,7 @@ resource "helm_release" "ingress_nginx" {
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
-  namespace  = "ingress-nginx"
+  namespace  = var.namespace
 
   set {
     name  = "controller.service.type"

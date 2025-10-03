@@ -1,4 +1,6 @@
 resource "kubernetes_namespace" "site_main" {
+  count = var.create_namespace ? 1 : 0
+  
   metadata {
     name = var.namespace
   }
@@ -26,7 +28,7 @@ resource "kubernetes_config_map" "nginx_config" {
   depends_on = [kubernetes_namespace.site_main]
   
   metadata {
-    name      = "nginx-config"
+    name      = "site-main-nginx-config"
     namespace = var.namespace
   }
 
@@ -39,10 +41,10 @@ resource "kubernetes_deployment" "site_main" {
   depends_on = [kubernetes_namespace.site_main]
   
   metadata {
-    name      = "${var.namespace}-deployment"
+    name      = "site-main-deployment"
     namespace = var.namespace
     labels = {
-      app         = "${var.namespace}"
+      app         = "site-main"
       component   = "web"
       tier        = "frontend"
       environment = "development"
@@ -53,13 +55,13 @@ resource "kubernetes_deployment" "site_main" {
     replicas = 1
     selector {
       match_labels = {
-        app = "${var.namespace}"
+        app = "site-main"
       }
     }
     template {
       metadata {
         labels = {
-          app         = "${var.namespace}"
+          app         = "site-main"
           component   = "web"
           tier        = "frontend"
           environment = "development"
@@ -68,7 +70,7 @@ resource "kubernetes_deployment" "site_main" {
       spec {
         container {
           image = "nginx:1.29.0-alpine-slim"
-          name  = var.namespace
+          name  = "site-main"
 
           port {
             container_port = 80
@@ -118,13 +120,13 @@ resource "kubernetes_service" "site_main" {
   depends_on = [kubernetes_namespace.site_main]
   
   metadata {
-    name      = "${var.namespace}-service"
+    name      = "site-main-service"
     namespace = var.namespace
   }
 
   spec {
     selector = {
-      app = "${var.namespace}"
+      app = "site-main"
     }
 
     port {
@@ -141,7 +143,7 @@ resource "kubernetes_ingress_v1" "site_main" {
   depends_on = [kubernetes_namespace.site_main]
   
   metadata {
-    name      = "${var.namespace}-ingress"
+    name      = "site-main-ingress"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"          = "nginx"
@@ -158,7 +160,7 @@ resource "kubernetes_ingress_v1" "site_main" {
           path_type = "Prefix"
           backend {
             service {
-              name = "${var.namespace}-service"
+              name = "site-main-service"
               port {
                 number = 80
               }
