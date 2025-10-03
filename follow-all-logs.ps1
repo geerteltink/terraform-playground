@@ -3,7 +3,8 @@ Write-Host "=== Following logs from all terraform-k8s project pods ===" -Foregro
 Write-Host "Press Ctrl+C to stop" -ForegroundColor Yellow
 
 # Get all pods with the project label
-$pods = kubectl get pods -l project=terraform-k8s --all-namespaces -o json | ConvertFrom-Json
+#$pods = kubectl get pods -l project=terraform-k8s --all-namespaces -o json | ConvertFrom-Json
+$pods = kubectl get pods --all-namespaces -o json | ConvertFrom-Json
 
 if ($pods.items.Count -eq 0) {
     Write-Host "No pods found with label project=terraform-k8s" -ForegroundColor Yellow

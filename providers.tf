@@ -8,16 +8,23 @@ terraform {
       source  = "hashicorp/helm"
       version = "~> 2.10.0"
     }
+    kubectl = {
+      source  = "registry.terraform.io/gavinbunney/kubectl"
+      version = ">= 1.10.0"
+    }
   }
 }
 
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "docker-desktop"
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path    = "~/.kube/config"
   }
+}
+
+provider "kubectl" {
+  config_path    = "~/.kube/config"
 }

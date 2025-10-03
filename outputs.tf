@@ -5,7 +5,6 @@ output "health_check_urls" {
     site_main = module.site_main.endpoint_info.health
     api_one   = module.api_one.endpoint_info.health
     api_two   = module.api_two.endpoint_info.health
-    api_jokes = module.api_jokes.endpoint_info.health
   }
 }
 
@@ -16,6 +15,5 @@ output "api_endpoints" {
     site_main = module.site_main.endpoint_info
     api_one   = module.api_one.endpoint_info
     api_two   = module.api_two.endpoint_info
-    api_jokes = module.api_jokes.endpoint_info
   }
 }

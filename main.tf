@@ -22,14 +22,6 @@ module "api_two" {
   namespace    = "api-two"
 }
 
-module "api_jokes" {
-  source = "./modules/api-jokes"
-
-  ingress_host = var.ingress_host
-  ingress_path = "/api/jokes"
-  namespace    = "api-jokes"
-}
-
 module "site_main" {
   source = "./modules/site-main"
 

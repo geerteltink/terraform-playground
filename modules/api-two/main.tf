@@ -141,6 +141,7 @@ resource "kubernetes_ingress_v1" "api_two" {
 
   spec {
     rule {
+      host = var.ingress_host
       http {
         path {
           path      = "${var.ingress_path}(/|$)(.*)"

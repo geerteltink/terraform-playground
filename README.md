@@ -2,6 +2,12 @@
 
 This is a terraform playground to be used with docker desktop and kubernetes.
 
+## Init
+
+```powershell
+kind create cluster --config ./kind.yaml
+```
+
 ## Usage
 
 ```bash

@@ -6,6 +6,8 @@ resource "kubernetes_namespace" "api_one" {
 
 # Create nginx configuration for JSON API responses
 resource "kubernetes_config_map" "nginx_config" {
+  depends_on = [kubernetes_namespace.api_one]
+  
   metadata {
     name      = "nginx-config"
     namespace = var.namespace
@@ -18,6 +20,8 @@ resource "kubernetes_config_map" "nginx_config" {
 
 # Create JSON content for API responses
 resource "kubernetes_config_map" "json_content" {
+  depends_on = [kubernetes_namespace.api_one]
+  
   metadata {
     name      = "json-content"
     namespace = var.namespace
@@ -31,6 +35,8 @@ resource "kubernetes_config_map" "json_content" {
 }
 
 resource "kubernetes_deployment" "api_one" {
+  depends_on = [kubernetes_namespace.api_one]
+  
   metadata {
     name      = "${var.namespace}-deployment"
     namespace = var.namespace
@@ -108,6 +114,8 @@ resource "kubernetes_deployment" "api_one" {
 }
 
 resource "kubernetes_service" "api_one" {
+  depends_on = [kubernetes_namespace.api_one]
+  
   metadata {
     name      = "${var.namespace}-service"
     namespace = var.namespace
@@ -129,6 +137,8 @@ resource "kubernetes_service" "api_one" {
 }
 
 resource "kubernetes_ingress_v1" "api_one" {
+  depends_on = [kubernetes_namespace.api_one]
+  
   metadata {
     name      = "${var.namespace}-ingress"
     namespace = var.namespace
@@ -141,6 +151,7 @@ resource "kubernetes_ingress_v1" "api_one" {
 
   spec {
     rule {
+      host = var.ingress_host
       http {
         path {
           path      = "${var.ingress_path}(/|$)(.*)"

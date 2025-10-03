@@ -6,6 +6,8 @@ resource "kubernetes_namespace" "site_main" {
 
 # Create HTML content for the main site
 resource "kubernetes_config_map" "site_main" {
+  depends_on = [kubernetes_namespace.site_main]
+  
   metadata {
     name      = "site-html"
     namespace = var.namespace
@@ -21,6 +23,8 @@ resource "kubernetes_config_map" "site_main" {
 
 # Create nginx configuration for UTF-8 support
 resource "kubernetes_config_map" "nginx_config" {
+  depends_on = [kubernetes_namespace.site_main]
+  
   metadata {
     name      = "nginx-config"
     namespace = var.namespace
@@ -32,6 +36,8 @@ resource "kubernetes_config_map" "nginx_config" {
 }
 
 resource "kubernetes_deployment" "site_main" {
+  depends_on = [kubernetes_namespace.site_main]
+  
   metadata {
     name      = "${var.namespace}-deployment"
     namespace = var.namespace
@@ -109,6 +115,8 @@ resource "kubernetes_deployment" "site_main" {
 }
 
 resource "kubernetes_service" "site_main" {
+  depends_on = [kubernetes_namespace.site_main]
+  
   metadata {
     name      = "${var.namespace}-service"
     namespace = var.namespace
@@ -130,6 +138,8 @@ resource "kubernetes_service" "site_main" {
 }
 
 resource "kubernetes_ingress_v1" "site_main" {
+  depends_on = [kubernetes_namespace.site_main]
+  
   metadata {
     name      = "${var.namespace}-ingress"
     namespace = var.namespace
@@ -141,6 +151,7 @@ resource "kubernetes_ingress_v1" "site_main" {
 
   spec {
     rule {
+      host = var.ingress_host
       http {
         path {
           path      = "/"
