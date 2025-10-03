@@ -23,6 +23,10 @@ module "ingress_controller" {
   depends_on = [kubernetes_namespace.shared]
 }
 
+module "metrics_server" {
+  source = "./modules/metrics-server"
+}
+
 module "api_one" {
   source = "./modules/api-one"
 
@@ -31,7 +35,7 @@ module "api_one" {
   namespace        = var.shared_namespace
   create_namespace = false
   
-  depends_on = [kubernetes_namespace.shared]
+  depends_on = [kubernetes_namespace.shared, module.metrics_server]
 }
 
 module "api_two" {
@@ -42,7 +46,7 @@ module "api_two" {
   namespace        = var.shared_namespace
   create_namespace = false
   
-  depends_on = [kubernetes_namespace.shared]
+  depends_on = [kubernetes_namespace.shared, module.metrics_server]
 }
 
 module "site_main" {
@@ -52,5 +56,5 @@ module "site_main" {
   namespace        = var.shared_namespace
   create_namespace = false
   
-  depends_on = [kubernetes_namespace.shared]
+  depends_on = [kubernetes_namespace.shared, module.metrics_server]
 }

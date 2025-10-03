@@ -18,7 +18,8 @@ foreach ($pod in $pods.items) {
     Write-Host "`n=== Logs from $podName (component: $component, tier: $tier) ===" -ForegroundColor Cyan
     
     try {
-        kubectl logs $podName -n $namespace --tail=10
+        kubectl logs $podName -n $namespace --tail=10 | ForEach-Object { Write-Host $_ }
+        Write-Host "`n" # Add explicit newlines after logs
     }
     catch {
         Write-Host "Error getting logs from $podName in namespace $namespace" -ForegroundColor Red

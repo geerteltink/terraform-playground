@@ -45,7 +45,6 @@ resource "kubernetes_deployment" "api_two" {
   }
 
   spec {
-    replicas = 2
     selector {
       match_labels = {
         app = "api-two"
@@ -156,6 +155,81 @@ resource "kubernetes_ingress_v1" "api_two" {
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+
+# Horizontal Pod Autoscaler for automatic scaling
+resource "kubernetes_horizontal_pod_autoscaler_v2" "api_two_hpa" {
+  depends_on = [kubernetes_deployment.api_two]
+  
+  metadata {
+    name      = "api-two-hpa"
+    namespace = var.namespace
+  }
+
+  spec {
+    scale_target_ref {
+      api_version = "apps/v1"
+      kind        = "Deployment"
+      name        = kubernetes_deployment.api_two.metadata[0].name
+    }
+
+    min_replicas = 1
+    max_replicas = 4
+
+    metric {
+      type = "Resource"
+      resource {
+        name = "cpu"
+        target {
+          type                = "Utilization"
+          average_utilization = 60
+        }
+      }
+    }
+
+    metric {
+      type = "Resource"
+      resource {
+        name = "memory"
+        target {
+          type                = "Utilization"
+          average_utilization = 70
+        }
+      }
+    }
+
+    behavior {
+      scale_up {
+        stabilization_window_seconds = 15
+        select_policy               = "Max"
+        policy {
+          type          = "Percent"
+          value         = 50
+          period_seconds = 60
+        }
+        policy {
+          type          = "Pods"
+          value         = 5
+          period_seconds = 120
+        }
+      }
+      
+      scale_down {
+        stabilization_window_seconds = 60
+        select_policy               = "Min"
+        policy {
+          type          = "Percent"
+          value         = 10
+          period_seconds = 120
+        }
+        policy {
+          type          = "Pods"
+          value         = 2
+          period_seconds = 300
         }
       }
     }
